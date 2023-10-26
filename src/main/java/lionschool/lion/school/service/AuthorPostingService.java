@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Slf4j
 @Service
@@ -20,45 +20,39 @@ import java.util.Optional;
 public class AuthorPostingService {
 
     @Autowired
-    private AuthorInformationJpaRepository repository;
-
-    public Author save(AuthorRequestDto requestDto) {
-
-        if (requestDto == null) {
-            throw new IllegalArgumentException("값을 확인해주세요");
-        }
-
-        return repository.save(requestDto.authorEntity());
-
-    }
-
+    private final AuthorInformationJpaRepository repository;
 
     @Transactional
-    public Author update(Long id, AuthorUpdateRequestDto updateRequestDto) {
+    public Author save(AuthorRequestDto requestDto) {
+        if (requestDto == null) {
+            throw new IllegalArgumentException("값이 null 입니다.");
+        }
+        return repository.save(requestDto.authorEntity());
+    }
+
+    @Transactional
+    public void update(Long id, AuthorUpdateRequestDto updateRequestDto) {
 
         Author author = repository.findById(id).orElseThrow();
 
-        System.out.println("-------------------------update log------------------------------");
-        log.info("author = {}" , author);
-        System.out.println("-----------------------------------------------------------------");
-
-        return author.update(updateRequestDto.getWriter(), updateRequestDto.getName());
-
+        author.update(updateRequestDto.getWise_saying(), updateRequestDto.getWriter());
     }
 
+    @Transactional
+    public Author findWriter(Long findWriter) {
+        return repository.findById(findWriter).orElseThrow();
+    }
+
+    @Transactional
     public void findTextDelete(Long findText) {
         repository.deleteById(findText);
     }
 
+    @Transactional
     public List<Author> findAll() {
         return new ArrayList<>(repository.findAll());
     }
 
-
-
-//    public List<Author> jsPost() {
-//        return new ArrayList<>(list.values());
-//    }
 
 
 

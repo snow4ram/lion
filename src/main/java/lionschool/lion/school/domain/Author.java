@@ -2,7 +2,6 @@ package lionschool.lion.school.domain;
 
 
 import jakarta.persistence.*;
-import lionschool.lion.school.web.request.AuthorUpdateRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,29 +16,30 @@ public class Author {
     private Long id;
 
     @Column(nullable = false)
-    private String writer;
+    private String wise_saying;
 
     @Column(nullable = false)
-    private String name;
+    private String writer;
 
     public Author() {
     }
 
     @Builder
-    public Author(final String writer, final String name) {
+    public Author(final String wise_saying, final String writer) {
+        this.wise_saying = wise_saying;
         this.writer = writer;
-        this.name = name;
     }
 
-    public Author update(String update_writers , String update_name) {
-        if (update_writers.isBlank() || update_name.isBlank()) {
+    public void update(String update_wise_saying , String update_writer) {
+
+        if (update_wise_saying.isBlank() || update_writer.isBlank()) {
             throw new IllegalArgumentException("값을 확인해주세요");
         }
 
-        this.writer = update_writers;
-        this.name = update_name;
+        this.wise_saying = update_wise_saying;
 
-        return new Author(getWriter() , getName());
+        this.writer = update_writer;
+
     }
 
     @Override
@@ -47,18 +47,18 @@ public class Author {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Author author = (Author) o;
-        return Objects.equals(id, author.id) && Objects.equals(writer, author.writer) && Objects.equals(name, author.name);
+        return Objects.equals(id, author.id) && Objects.equals(wise_saying, author.wise_saying) && Objects.equals(writer, author.writer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, writer, name);
+        return Objects.hash(id, wise_saying, writer);
     }
 
     @Override
     public String toString() {
         return  "id = " + id+ "\t" +
-                " writer = " + writer + "\t" +
-                " name = " + name;
+                " wise_saying = " + wise_saying + "\t" +
+                " writer = " + writer;
     }
 }
